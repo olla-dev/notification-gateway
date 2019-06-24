@@ -16,22 +16,22 @@ class NotificationController extends Controller
     {
         $this->middleware('auth.apikey');
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
     
     /**
      * Create a notification 
+     * 
+     * @param  Request  $request
+     * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        
+        $validatedData = $request->validate([
+            'subject' => 'required|unique:posts|max:255',
+            'msgContent' => 'required',
+            'type' => 'required',
+            'phone_number' => 'required',
+            'email_address' => 'required',
+            'customer' => 'required',
+        ]);
     }
 }

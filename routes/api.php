@@ -13,8 +13,20 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+use Dingo\Api\Routing\Router;
+
+/** @var Router $api */
+$api = app(Router::class);
+
+$api->version('v1', function (Router $api) {
+    $api->group(['middleware' => 'auth:api'], function(Router $api) {
+        $api->get('/user', function (Request $request) {
+            return $request->user();
+        });
+
+
+        $api->post('notify', 'NotificationController@create');
+    });
 });
 
 
