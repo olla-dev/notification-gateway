@@ -13,6 +13,7 @@
         "ejarnutowski/laravel-api-key": "^1.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
+        "laravel/nexmo-notification-channel": "^2.0",
         "laravel/tinker": "^1.0"
     },
     "require-dev": {
