@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Notification;
+use App\Customer;
 use Illuminate\Http\Request;
+use Webpatser\Uuid\Uuid;
+use App\Notifications\SMSNotification;
+use App\Notifications\EmailNotification;
 
 class NotificationController extends Controller
 {
@@ -25,13 +29,52 @@ class NotificationController extends Controller
      */
     public function create(Request $request)
     {
-        $validatedData = $request->validate([
-            'subject' => 'required|unique:posts|max:255',
+        $validator = \Validator::make($request->all(), [
+            'subject' => 'required|max:255',
             'msgContent' => 'required',
-            'type' => 'required',
+            'category' => 'required',
+            'channel' => 'required|in:SMS,EMAIL',
             'phone_number' => 'required',
-            'email_address' => 'required',
-            'customer' => 'required',
+            'email' => 'required',
+            'name' => 'required|exists:customers',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
+        // get Customer by Name and check his credit 
+        $customerName = $request->get('name');
+        $customer = Customer::where('name', '=', $customerName)->firstOrFail();
+
+        if($customer->credit == 0){
+            return response()->json([
+                'message' => 'This customer has no notification credit left!'
+            ], 500);
+        }
+
+        // persist Notification and queue it
+        $notification = new Notification;
+        $notification->msgId = Uuid::generate();
+        $notification->subject = $request->get('subject');
+        $notification->msgContent = $request->get('msgContent');
+        $notification->channel = $request->get('channel');
+        $notification->category = $request->get('category');
+        $notification->customer_id = $customer->id;
+        $notification->status = Notification::STATUS_PENDING;
+        $notification->phone_number = $request->get('phone_number');
+        $notification->email = $request->get('email');
+        $notification->save();
+
+        // queue notification 
+        if($notification->channel == Notification::CHANNEL_SMS){
+            $notification->notify(new SMSNotification($notification));
+        } else {
+            $notification->notify(new EmailNotification($notification));
+        }
+
+        return response()
+            ->json(['message' => 'Notification submitted successfully!']);
+            
     }
 }

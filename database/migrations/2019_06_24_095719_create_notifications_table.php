@@ -22,7 +22,7 @@ class CreateNotificationsTable extends Migration
             $table->enum('status', ['SENT', 'PENDING', 'FAILED']);
             $table->enum('channel', ['SMS', 'EMAIL', 'VOICE']);
             $table->string('phone_number');
-            $table->string('email_address');
+            $table->string('email');
             $table->string('category');
             $table->string('subject');
 

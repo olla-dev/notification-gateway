@@ -13,23 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-use Dingo\Api\Routing\Router;
+Route::middleware(['auth.apikey'])->group(function () {
+    Route::get('/user', function () {
+        return $request->user();
+    });
 
-/** @var Router $api */
-$api = app(Router::class);
+    Route::post('notify', 'NotificationController@create');
 
-$api->version('v1', function (Router $api) {
-    $api->group(['middleware' => 'auth:api'], function(Router $api) {
-        $api->get('/user', function (Request $request) {
-            return $request->user();
-        });
-
-
-        $api->post('notify', 'NotificationController@create');
+    Route::get('ping', function() {
+        return response()->json([
+            'message' => 'Notification API is live.'
+        ]);
     });
 });
-
-
-Route::post('notify', function () {
-    //
-})->middleware('auth.apikey');

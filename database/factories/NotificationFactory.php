@@ -10,9 +10,9 @@ $factory->define(Notification::class, function (Faker $faker) {
         'msgId' => $faker->uuid,
         'msgContent' => $faker->realText($maxNbChars = 200, $indexSize = 2),
         'phone_number' => $faker->e164PhoneNumber, 
-        'email_address' => $faker->email, 
+        'email' => $faker->email, 
         'category' => $faker->word, 
-        'subject' => $faker->subject, 
+        'subject' => $faker->word, 
         'status' => $faker->randomElement($array = array ('SENT', 'PENDING', 'FAILED')),
         'channel' => $faker->randomElement($array = array ('SMS', 'EMAIL', 'VOICE')),
         'customer_id' => App\Customer::all()->random()->id
