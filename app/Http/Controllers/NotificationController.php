@@ -68,8 +68,24 @@ class NotificationController extends Controller
 
         // queue notification 
         if($notification->channel == Notification::CHANNEL_SMS){
+            if(!$customer->hasSMS){
+                $notification->status = Notification::STATUS_FAILED;
+                $notification->save();
+                return response()->json([
+                    'message' => 'This customer does not have SMS notifications enabled!'
+                ], 500);
+            }
+
             $notification->notify(new SMSNotification($notification));
         } else {
+            if(!$customer->hasEmail){
+                $notification->status = Notification::STATUS_FAILED;
+                $notification->save();
+                return response()->json([
+                    'message' => 'This customer does not have email notifications enabled!'
+                ], 500);
+            }
+
             $notification->notify(new EmailNotification($notification));
         }
 

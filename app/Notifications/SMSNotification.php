@@ -46,7 +46,7 @@ class SMSNotification extends Notification implements ShouldQueue
         $notification = $this->notification;
 
         return (new NexmoMessage)
-                    ->content($notification->subject.' \n'.$notification->msgContent)
+                    ->content($notification->subject." \n".$notification->msgContent)
                     ->unicode();
     }
 
