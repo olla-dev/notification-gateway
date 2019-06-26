@@ -22,6 +22,11 @@ class SMSNotification extends Notification implements ShouldQueue
     public function __construct($notification)
     {
         $this->notification = $notification;
+
+
+        if(!empty($notification->sendOn)){
+            $this->delay($notification->sendOn);
+        }
     }
 
     /**

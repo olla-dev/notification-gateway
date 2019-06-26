@@ -25,6 +25,7 @@ class CreateNotificationsTable extends Migration
             $table->string('email');
             $table->string('category');
             $table->string('subject');
+            $table->string('sendOn')->default(''); // send the notification on a specific date time
 
             $table->bigInteger('customer_id')->unsigned();
                 $table->foreign('customer_id')

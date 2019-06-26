@@ -64,6 +64,7 @@ class NotificationController extends Controller
         $notification->status = Notification::STATUS_PENDING;
         $notification->phone_number = $request->get('phone_number');
         $notification->email = $request->get('email');
+        $notification->sendOn = $request->get('sendOn');
         $notification->save();
 
         // queue notification 
