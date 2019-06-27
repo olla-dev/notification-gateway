@@ -21,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Notifications\Events\NotificationSent' => [
             'App\Listeners\LogNotification',
         ],
+
+        'Illuminate\Notifications\Events\NotificationSending' => [
+            'App\Listeners\NotificationSendingListener',
+        ],
     ];
 
     /**

@@ -16,6 +16,7 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            $table->string("uuid")->unique();
             $table->string("name");
             $table->string("instanceURL");
             $table->string("contactPhone");

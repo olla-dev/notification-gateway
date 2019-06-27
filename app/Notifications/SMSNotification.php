@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\NexmoMessage;
+use Carbon\Carbon;
 
 class SMSNotification extends Notification implements ShouldQueue
 {
@@ -25,9 +26,17 @@ class SMSNotification extends Notification implements ShouldQueue
 
 
         if(!empty($notification->sendOn)){
-            $this->delay($notification->sendOn);
+            $this->delay(Carbon::parse($notification->sendOn));
         }
     }
+
+
+
+    public function dontSend($notifiable)
+    {
+        return $this->notification->status === \App\Notification::STATUS_CANCELLED;
+    }
+
 
     /**
      * Get the notification's delivery channels.
@@ -37,6 +46,11 @@ class SMSNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
+
+        if($this->dontSend($notifiable)) {
+            return [];
+        }    
+
         return ['nexmo'];
     }
 

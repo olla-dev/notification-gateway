@@ -36,7 +36,7 @@ class NotificationController extends Controller
             'channel' => 'required|in:SMS,EMAIL',
             'phone_number' => 'required',
             'email' => 'required',
-            'name' => 'required|exists:customers',
+            'uuid' => 'required|exists:customers',
         ]);
 
         if ($validator->fails()) {
@@ -44,8 +44,8 @@ class NotificationController extends Controller
         }
 
         // get Customer by Name and check his credit 
-        $customerName = $request->get('name');
-        $customer = Customer::where('name', '=', $customerName)->firstOrFail();
+        $customerUuid = $request->get('uuid');
+        $customer = Customer::where('uuid', '=', $customerUuid)->firstOrFail();
 
         if($customer->credit == 0){
             return response()->json([
@@ -93,5 +93,29 @@ class NotificationController extends Controller
         return response()
             ->json(['message' => 'Notification submitted successfully!']);
             
+    }
+
+
+
+    /**
+     * Get list of notifications for a customer
+     * 
+     * @param  Request  $request
+     * @return Response
+     */
+    public function list(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'uuid' => 'required|exists:customers',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
+        $customer = Customer::where('uuid', '=', $request['uuid'])->firstOrFail();
+        $notifications = Notification::where('customer_id', '=',$customer->id)->get();
+
+        return response()->json(['notifications'=>$notifications->toArray()]);
     }
 }

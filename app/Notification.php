@@ -16,6 +16,7 @@ class Notification extends Model
     const STATUS_PENDING = 'PENDING';
     const STATUS_SENT = 'SENT';
     const STATUS_FAILED = 'FAILED';
+    const STATUS_CANCELLED = 'CANCELLED';
 
 
 

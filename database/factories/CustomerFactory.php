@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Customer::class, function (Faker $faker) {
     return [
+        'uuid' => $faker->uuid,
         'name' => $faker->company,
         'instanceURL' => $faker->url,
         'contactPhone' => $faker->e164PhoneNumber, 

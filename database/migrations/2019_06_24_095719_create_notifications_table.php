@@ -19,19 +19,19 @@ class CreateNotificationsTable extends Migration
             $table->uuid("msgId");
             $table->string("msgContent");
 
-            $table->enum('status', ['SENT', 'PENDING', 'FAILED']);
+            $table->enum('status', ['SENT', 'PENDING', 'FAILED', 'CANCELLED']);
             $table->enum('channel', ['SMS', 'EMAIL', 'VOICE']);
             $table->string('phone_number');
             $table->string('email');
             $table->string('category');
             $table->string('subject');
-            $table->string('sendOn')->default(''); // send the notification on a specific date time
+            $table->string('sendOn')->nullable()->default(''); // send the notification on a specific date time
 
             $table->bigInteger('customer_id')->unsigned();
-                $table->foreign('customer_id')
-                    ->references('id')
-                    ->on('customers')
-                    ->onDelete('cascade');        
+            $table->foreign('customer_id')
+                ->references('id')
+                ->on('customers')
+                ->onDelete('cascade');        
 
             $table->timestamps();
         });

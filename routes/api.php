@@ -19,6 +19,7 @@ Route::middleware(['auth.apikey'])->group(function () {
     });
 
     Route::post('notify', 'NotificationController@create');
+    Route::post('notifications', 'NotificationController@list');
 
     Route::get('ping', function() {
         return response()->json([
