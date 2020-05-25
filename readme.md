@@ -12,4 +12,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
-The Laravel framework is open-source software licensed under the Apache 2.0 license.
+Olla Notification Gateway is open-source software licensed under the Apache 2.0 license.
